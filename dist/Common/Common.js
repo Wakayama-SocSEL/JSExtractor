@@ -36,13 +36,15 @@ exports.normalizeName = (original, defaultString) => {
         return stripped;
     }
 };
-exports.isMethod = (node, type) => {
-    const parentProperty = node.parentPath;
-    if (parentProperty == null) {
+exports.isMethod = (node) => {
+    if (!ast_types_1.namedTypes.Identifier.check(node.value)) {
         return false;
     }
-    else if (ast_types_1.namedTypes.Function.check(parentProperty.value)) {
-    }
+    return (ast_types_1.namedTypes.Function.check(node.parentPath.value) ||
+        (ast_types_1.namedTypes.VariableDeclarator.check(node.parentPath.value) &&
+            ast_types_1.namedTypes.Function.check(node.parentPath.value.init)) ||
+        ast_types_1.namedTypes.MethodDefinition.check(node.parentPath.value) ||
+        (ast_types_1.namedTypes.ClassProperty.check(node.parentPath.value) && ast_types_1.namedTypes.Function.check(node.parentPath.value.value)));
 };
 exports.splitToSubtokens = (str1) => {
     const str2 = str1.trim();

@@ -41,12 +41,18 @@ export const normalizeName = (original: string, defaultString: string): string =
   }
 };
 
-export const isMethod = (node: ASTPath<Node>, type: string): boolean => {
-  const parentProperty: ASTPath<Node> = node.parentPath;
-  if (parentProperty == null) {
+export const isMethod = (node: ASTPath<Node>): boolean => {
+  if (!n.Identifier.check(node.value)) {
     return false;
-  } else if (n.Function.check(parentProperty.value)) {
   }
+
+  return (
+    n.Function.check(node.parentPath.value) ||
+    (n.VariableDeclarator.check(node.parentPath.value) &&
+      n.Function.check(node.parentPath.value.init)) ||
+    n.MethodDefinition.check(node.parentPath.value) ||
+    (n.ClassProperty.check(node.parentPath.value) && n.Function.check(node.parentPath.value.value))
+  );
 };
 
 export const splitToSubtokens = (str1: string): string[] => {

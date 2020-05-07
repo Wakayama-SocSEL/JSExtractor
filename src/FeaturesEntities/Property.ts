@@ -45,7 +45,7 @@ export default class Property {
       this.Name = this.Name.substring(0, Common.c_MaxLabelLength);
     }
 
-    if (Common.isMethod(node, this.Type)) {
+    if (Common.isMethod(node)) {
       this.Name = this.SplitName = Common.methodName;
     }
 

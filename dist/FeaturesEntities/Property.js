@@ -36,7 +36,7 @@ class Property {
         if (this.Name.length > Common.c_MaxLabelLength) {
             this.Name = this.Name.substring(0, Common.c_MaxLabelLength);
         }
-        if (Common.isMethod(node, this.Type)) {
+        if (Common.isMethod(node)) {
             this.Name = this.SplitName = Common.methodName;
         }
         if (this.SplitName.length === 0) {
