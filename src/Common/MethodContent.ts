@@ -1,19 +1,18 @@
 "use strict";
-import { Node } from "ast-types/gen/nodes";
-import { ASTPath } from "jscodeshift";
+import ProcessedNode from "../Visitors/ProcessedNode";
 
 export default class MethodContent {
-  private leaves: ASTPath<Node>[];
+  private leaves: ProcessedNode[];
   private name: string;
   private length: number;
 
-  constructor(leaves: ASTPath<Node>[], name: string, length: number) {
+  constructor(leaves: ProcessedNode[], name: string, length: number) {
     this.leaves = leaves;
     this.name = name;
     this.length = length;
   }
 
-  public getLeaves = (): ASTPath<Node>[] => {
+  public getLeaves = (): ProcessedNode[] => {
     return this.leaves;
   };
 

@@ -24,8 +24,15 @@ class Property {
         if (this.Operator.length > 0) {
             this.Type += `:${this.Operator}`;
         }
-        const nameToSplit = node.value.loc["tokens"]
-            .slice(node.value.loc.start["token"], node.value.loc.end["token"])
+        let loc = {};
+        if (ast_types_1.namedTypes.FunctionExpression.check(node.value) && ast_types_1.namedTypes.MethodDefinition.check(node.parentPath.value)) {
+            loc = node.parentPath.value.loc;
+        }
+        else {
+            loc = node.value.loc;
+        }
+        const nameToSplit = loc["tokens"]
+            .slice(loc["start"]["token"], loc["end"]["token"])
             .map((v) => {
             return v.value;
         })

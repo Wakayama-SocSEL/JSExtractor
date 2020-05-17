@@ -2,7 +2,6 @@
 
 import { ASTPath } from "jscodeshift";
 import { namedTypes as n } from "ast-types";
-import { Node } from "ast-types/gen/nodes";
 import * as Common from "../Common/Common";
 
 export default class Property {
@@ -13,7 +12,7 @@ export default class Property {
   private Operator: string;
   private NumericalKeepValues: string[] = ["0", "1", "32", "64"];
 
-  constructor(node: ASTPath<Node>) {
+  constructor(node: ASTPath<n.Node>) {
     this.RawType = this.Type = node.value.type;
 
     this.Operator = "";
@@ -29,8 +28,15 @@ export default class Property {
       this.Type += `:${this.Operator}`;
     }
 
-    const nameToSplit = node.value.loc["tokens"]
-      .slice(node.value.loc.start["token"], node.value.loc.end["token"])
+    let loc = {};
+    if (n.FunctionExpression.check(node.value) && n.MethodDefinition.check(node.parentPath.value)) {
+      loc = node.parentPath.value.loc;
+    } else {
+      loc = node.value.loc;
+    }
+
+    const nameToSplit = loc["tokens"]
+      .slice(loc["start"]["token"], loc["end"]["token"])
       .map((v) => {
         return v.value;
       })

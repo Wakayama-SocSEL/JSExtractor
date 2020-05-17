@@ -1,7 +1,6 @@
 "use strict";
 
 import { ASTPath } from "jscodeshift";
-import { Node } from "ast-types/gen/nodes";
 import { namedTypes as n } from "ast-types";
 
 export const EmptyString = "";
@@ -41,7 +40,7 @@ export const normalizeName = (original: string, defaultString: string): string =
   }
 };
 
-export const isMethod = (node: ASTPath<Node>): boolean => {
+export const isMethod = (node: ASTPath<n.Node>): boolean => {
   if (!n.Identifier.check(node.value)) {
     return false;
   }
@@ -62,4 +61,35 @@ export const splitToSubtokens = (str1: string): string[] => {
     .filter((s) => s.length > 0)
     .map((s) => normalizeName(s, EmptyString))
     .filter((s) => s.length > 0);
+};
+
+export const nodeToString = (node: n.Node): string => {
+  return node.loc["tokens"]
+    .slice(node.loc.start["token"], node.loc.end["token"])
+    .filter((v) => {
+      return !n.Comment.check(v);
+    })
+    .map((v) => {
+      return v.value;
+    })
+    .join(" ");
+};
+
+export const getName = (node: ASTPath<n.Node>): string => {
+  if (n.FunctionDeclaration.check(node.value)) {
+    return node.value.id.name;
+  } else if (
+    (n.FunctionExpression.check(node.value) || n.ArrowFunctionExpression.check(node.value)) &&
+    n.VariableDeclarator.check(node.parentPath.value)
+  ) {
+    return node.parentPath.value.id.name;
+  } else if (
+    (n.FunctionExpression.check(node.value) || n.ArrowFunctionExpression.check(node.value)) &&
+    (n.MethodDefinition.check(node.parentPath.value) ||
+      n.ClassProperty.check(node.parentPath.value))
+  ) {
+    return node.parentPath.value.key.name;
+  } else {
+    return null;
+  }
 };

@@ -5,7 +5,7 @@ import Property from "./Property";
 
 export default class ProgramFeatures {
   private name: string;
-  private features: ProgramRelation[];
+  private features: ProgramRelation[] = [];
 
   constructor(name: string) {
     this.name = name;

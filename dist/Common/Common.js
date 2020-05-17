@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getName = exports.nodeToString = exports.splitToSubtokens = exports.isMethod = exports.normalizeName = exports.internalSeparator = exports.methodName = exports.c_MaxLabelLength = exports.BlankWord = exports.DummyNode = exports.MethodCallExpr = exports.NameExpr = exports.MethodDeclaration = exports.ClassOrInterfaceType = exports.FieldAccessExpr = exports.EvaluateTempDir = exports.UTF8 = exports.EmptyString = void 0;
 const ast_types_1 = require("ast-types");
 exports.EmptyString = "";
 exports.UTF8 = "utf-8";
@@ -53,4 +54,32 @@ exports.splitToSubtokens = (str1) => {
         .filter((s) => s.length > 0)
         .map((s) => exports.normalizeName(s, exports.EmptyString))
         .filter((s) => s.length > 0);
+};
+exports.nodeToString = (node) => {
+    return node.loc["tokens"]
+        .slice(node.loc.start["token"], node.loc.end["token"])
+        .filter((v) => {
+        return !ast_types_1.namedTypes.Comment.check(v);
+    })
+        .map((v) => {
+        return v.value;
+    })
+        .join(" ");
+};
+exports.getName = (node) => {
+    if (ast_types_1.namedTypes.FunctionDeclaration.check(node.value)) {
+        return node.value.id.name;
+    }
+    else if ((ast_types_1.namedTypes.FunctionExpression.check(node.value) || ast_types_1.namedTypes.ArrowFunctionExpression.check(node.value)) &&
+        ast_types_1.namedTypes.VariableDeclarator.check(node.parentPath.value)) {
+        return node.parentPath.value.id.name;
+    }
+    else if ((ast_types_1.namedTypes.FunctionExpression.check(node.value) || ast_types_1.namedTypes.ArrowFunctionExpression.check(node.value)) &&
+        (ast_types_1.namedTypes.MethodDefinition.check(node.parentPath.value) ||
+            ast_types_1.namedTypes.ClassProperty.check(node.parentPath.value))) {
+        return node.parentPath.value.key.name;
+    }
+    else {
+        return null;
+    }
 };

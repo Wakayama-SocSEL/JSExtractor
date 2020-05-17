@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ProgramRelation_1 = require("./ProgramRelation");
 class ProgramFeatures {
     constructor(name) {
+        this.features = [];
         this.toString = () => {
             return `${this.name} ${this.features.join(" ")}`;
         };
