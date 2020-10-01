@@ -56,8 +56,8 @@ export const isMethod = (node: ASTPath<n.Node>): boolean => {
 
 export const splitToSubtokens = (str1: string): string[] => {
   const str2: string = str1.trim();
-  const strArray = str2.split(/(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\s+/);
-  return strArray
+  return str2
+    .split(/(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\s+/)
     .filter((s) => s.length > 0)
     .map((s) => normalizeName(s, EmptyString))
     .filter((s) => s.length > 0);

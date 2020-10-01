@@ -34,24 +34,28 @@ const getFileType = (path: string): string => {
 
 const listFiles = (dirPath: string): string[] => {
   const ret = [];
-  const paths = fs.readdirSync(dirPath);
+  try {
+    const paths = fs.readdirSync(dirPath);
 
-  paths.forEach((a) => {
-    const path = `${dirPath}/${a}`;
+    paths.forEach((a) => {
+      const path = `${dirPath}/${a}`;
 
-    switch (getFileType(path)) {
-      case FileType.File:
-        ret.push(path);
-        break;
+      switch (getFileType(path)) {
+        case FileType.File:
+          ret.push(path);
+          break;
 
-      case FileType.Directory:
-        ret.push(...listFiles(path));
-        break;
+        case FileType.Directory:
+          ret.push(...listFiles(path));
+          break;
 
-      default:
-      /* noop */
-    }
-  });
+        default:
+        /* noop */
+      }
+    });
+  } catch (e) {
+    return [];
+  }
 
   return ret;
 };

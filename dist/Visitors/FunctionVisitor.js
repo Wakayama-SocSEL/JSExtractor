@@ -23,7 +23,7 @@ class FunctionVisitor {
             leavesCollectorVisitor.visitDepthFirst(new ProcessedNode_1.default(node, parent));
             const leaves = leavesCollectorVisitor.getLeaves();
             const normalizedMethodName = Common.normalizeName(Common.getName(node), Common.BlankWord);
-            const splitNameParts = Common.splitToSubtokens(normalizedMethodName);
+            const splitNameParts = Common.splitToSubtokens(Common.getName(node));
             let splitName = normalizedMethodName;
             if (splitNameParts.length > 0) {
                 splitName = splitNameParts.join(Common.internalSeparator);

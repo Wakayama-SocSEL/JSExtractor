@@ -27,7 +27,7 @@ export default class ExtractFeaturesTask {
       return;
     }
 
-    const toPrint = this.featuresToString(features);
+    const toPrint = this.featuresToString(features).trim();
     if (toPrint.length > 0) {
       console.log(toPrint);
     }

@@ -49,8 +49,8 @@ exports.isMethod = (node) => {
 };
 exports.splitToSubtokens = (str1) => {
     const str2 = str1.trim();
-    const strArray = str2.split(/(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\s+/);
-    return strArray
+    return str2
+        .split(/(?<=[a-z])(?=[A-Z])|_|[0-9]|(?<=[A-Z])(?=[A-Z][a-z])|\s+/)
         .filter((s) => s.length > 0)
         .map((s) => exports.normalizeName(s, exports.EmptyString))
         .filter((s) => s.length > 0);
