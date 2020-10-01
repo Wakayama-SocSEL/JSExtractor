@@ -4,6 +4,22 @@ const CommandLineValues_1 = require("./Common/CommandLineValues");
 const ProgramRelation_1 = require("./FeaturesEntities/ProgramRelation");
 const ExtractFeaturesTask_1 = require("./ExtractFeaturesTask");
 const fs = require("fs");
+const log4js = require("log4js");
+log4js.configure({
+    appenders: {
+        system: {
+            type: "file",
+            filename: "error.log",
+        },
+    },
+    categories: {
+        default: {
+            appenders: ["system"],
+            level: "error",
+        },
+    },
+});
+const logger = log4js.getLogger("system");
 const s_CommandLineValues = new CommandLineValues_1.default();
 const FileType = {
     File: "file",
@@ -59,7 +75,7 @@ const extractDir = () => {
             }
         }
         catch (e) {
-            console.error(e);
+            logger.error(file, e);
             continue;
         }
     }

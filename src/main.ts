@@ -4,6 +4,23 @@ import CommandLineValues from "./Common/CommandLineValues";
 import ProgramRelation from "./FeaturesEntities/ProgramRelation";
 import ExtractFeaturesTask from "./ExtractFeaturesTask";
 import * as fs from "fs";
+import * as log4js from "log4js";
+
+log4js.configure({
+  appenders: {
+    system: {
+      type: "file",
+      filename: "error.log",
+    },
+  },
+  categories: {
+    default: {
+      appenders: ["system"],
+      level: "error",
+    },
+  },
+});
+const logger = log4js.getLogger("system");
 
 const s_CommandLineValues = new CommandLineValues();
 
@@ -69,7 +86,7 @@ const extractDir = (): void => {
         extractFeaturesTask.processFile();
       }
     } catch (e) {
-      console.error(e);
+      logger.error(file, e);
       continue;
     }
   }

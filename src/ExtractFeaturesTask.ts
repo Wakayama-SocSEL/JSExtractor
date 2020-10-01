@@ -17,12 +17,7 @@ export default class ExtractFeaturesTask {
 
   processFile = (): void => {
     let features: ProgramFeatures[] = [];
-    try {
-      features = this.extractSingleFile();
-    } catch (e) {
-      console.error(e);
-      return;
-    }
+    features = this.extractSingleFile();
     if (features == null) {
       return;
     }
@@ -35,20 +30,17 @@ export default class ExtractFeaturesTask {
 
   extractSingleFile = (): ProgramFeatures[] => {
     const features = [];
-    try {
-      jscodeshift(readFileSync(this.path, Common.UTF8).toString())
-        .find(jscodeshift.Function)
-        .filter((path) => {
-          return Common.getName(path) !== null;
-        })
-        .forEach((path) => {
-          const featureExtractor = new FeatureExtractor(this.m_CommandLineValues);
-          features.push(featureExtractor.extractFeatures(path));
-        });
-    } catch (e) {
-      console.error(e);
-      return [];
-    }
+    jscodeshift(readFileSync(this.path, Common.UTF8).toString(), {
+      parser: require("recast/parsers/esprima"),
+    })
+      .find(jscodeshift.Function)
+      .filter((path) => {
+        return Common.getName(path) !== null;
+      })
+      .forEach((path) => {
+        const featureExtractor = new FeatureExtractor(this.m_CommandLineValues);
+        features.push(featureExtractor.extractFeatures(path));
+      });
 
     return features;
   };

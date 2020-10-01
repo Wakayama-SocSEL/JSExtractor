@@ -8,13 +8,7 @@ class ExtractFeaturesTask {
     constructor(commandLineValues, path) {
         this.processFile = () => {
             let features = [];
-            try {
-                features = this.extractSingleFile();
-            }
-            catch (e) {
-                console.error(e);
-                return;
-            }
+            features = this.extractSingleFile();
             if (features == null) {
                 return;
             }
@@ -25,21 +19,17 @@ class ExtractFeaturesTask {
         };
         this.extractSingleFile = () => {
             const features = [];
-            try {
-                jscodeshift(fs_1.readFileSync(this.path, Common.UTF8).toString())
-                    .find(jscodeshift.Function)
-                    .filter((path) => {
-                    return Common.getName(path) !== null;
-                })
-                    .forEach((path) => {
-                    const featureExtractor = new FeatureExtractor_1.default(this.m_CommandLineValues);
-                    features.push(featureExtractor.extractFeatures(path));
-                });
-            }
-            catch (e) {
-                console.error(e);
-                return [];
-            }
+            jscodeshift(fs_1.readFileSync(this.path, Common.UTF8).toString(), {
+                parser: require("recast/parsers/esprima"),
+            })
+                .find(jscodeshift.Function)
+                .filter((path) => {
+                return Common.getName(path) !== null;
+            })
+                .forEach((path) => {
+                const featureExtractor = new FeatureExtractor_1.default(this.m_CommandLineValues);
+                features.push(featureExtractor.extractFeatures(path));
+            });
             return features;
         };
         this.featuresToString = (features) => {

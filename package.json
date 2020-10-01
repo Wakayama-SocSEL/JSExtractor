@@ -14,7 +14,9 @@
     "@babel/preset-env": "^7.11.5",
     "ast-types": "^0.13.4",
     "command-line-args": "^5.1.1",
-    "jscodeshift": "^0.9.0"
+    "jscodeshift": "^0.9.0",
+    "log4js": "^6.3.0",
+    "recast": "^0.20.3"
   },
   "devDependencies": {
     "@types/command-line-args": "^5.0.0",
