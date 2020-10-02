@@ -34,7 +34,9 @@ class ProcessedNode {
         const nodeFields = [];
         for (const field of fields) {
             const node = ast_types_1.getFieldValue(path.value, field);
-            if (isNode(node) && (!Array.isArray(node) || node.length != 0)) {
+            if (isNode(node) &&
+                (!Array.isArray(node) || node.length != 0) &&
+                !(ast_types_1.namedTypes.Literal.check(path.value) && (field == "value" || field == "regex"))) {
                 nodeFields.push(field);
             }
         }

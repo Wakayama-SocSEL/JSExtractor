@@ -21,7 +21,11 @@ export default class ProcessedNode {
     const nodeFields: string[] = [];
     for (const field of fields) {
       const node = getFieldValue(path.value, field);
-      if (isNode(node) && (!Array.isArray(node) || node.length != 0)) {
+      if (
+        isNode(node) &&
+        (!Array.isArray(node) || node.length != 0) &&
+        !(n.Literal.check(path.value) && (field == "value" || field == "regex"))
+      ) {
         nodeFields.push(field);
       }
     }
