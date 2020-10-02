@@ -4,6 +4,22 @@ const Common = require("./Common/Common");
 const FeatureExtractor_1 = require("./FeatureExtractor");
 const fs_1 = require("fs");
 const jscodeshift = require("jscodeshift");
+const log4js = require("log4js");
+log4js.configure({
+    appenders: {
+        system: {
+            type: "file",
+            filename: "error.log",
+        },
+    },
+    categories: {
+        default: {
+            appenders: ["system"],
+            level: "error",
+        },
+    },
+});
+const logger = log4js.getLogger("system");
 class ExtractFeaturesTask {
     constructor(commandLineValues, path) {
         this.processFile = () => {
@@ -27,8 +43,13 @@ class ExtractFeaturesTask {
                 return Common.getName(path) !== null;
             })
                 .forEach((path) => {
-                const featureExtractor = new FeatureExtractor_1.default(this.m_CommandLineValues);
-                features.push(featureExtractor.extractFeatures(path));
+                try {
+                    const featureExtractor = new FeatureExtractor_1.default(this.m_CommandLineValues);
+                    features.push(featureExtractor.extractFeatures(path));
+                }
+                catch (e) {
+                    logger.error(path, e);
+                }
             });
             return features;
         };

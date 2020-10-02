@@ -2,6 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ast_types_1 = require("ast-types");
 const Common = require("../Common/Common");
+const log4js = require("log4js");
+log4js.configure({
+    appenders: {
+        system: {
+            type: "file",
+            filename: "error.log",
+        },
+    },
+    categories: {
+        default: {
+            appenders: ["system"],
+            level: "error",
+        },
+    },
+});
+const logger = log4js.getLogger("system");
 class Property {
     constructor(node) {
         this.NumericalKeepValues = ["0", "1", "32", "64"];
@@ -30,6 +46,9 @@ class Property {
         }
         else {
             loc = node.value.loc;
+        }
+        if (!loc) {
+            logger.error(node);
         }
         const nameToSplit = loc["tokens"]
             .slice(loc["start"]["token"], loc["end"]["token"])

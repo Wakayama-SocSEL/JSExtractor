@@ -5,7 +5,23 @@ import * as Common from "./Common/Common";
 import FeatureExtractor from "./FeatureExtractor";
 import { readFileSync } from "fs";
 import * as jscodeshift from "jscodeshift";
+import * as log4js from "log4js";
 
+log4js.configure({
+  appenders: {
+    system: {
+      type: "file",
+      filename: "error.log",
+    },
+  },
+  categories: {
+    default: {
+      appenders: ["system"],
+      level: "error",
+    },
+  },
+});
+const logger = log4js.getLogger("system");
 export default class ExtractFeaturesTask {
   private m_CommandLineValues: CommandLineValues;
   private path: string;
@@ -38,8 +54,12 @@ export default class ExtractFeaturesTask {
         return Common.getName(path) !== null;
       })
       .forEach((path) => {
-        const featureExtractor = new FeatureExtractor(this.m_CommandLineValues);
-        features.push(featureExtractor.extractFeatures(path));
+        try {
+          const featureExtractor = new FeatureExtractor(this.m_CommandLineValues);
+          features.push(featureExtractor.extractFeatures(path));
+        } catch (e) {
+          logger.error(path, e);
+        }
       });
 
     return features;
