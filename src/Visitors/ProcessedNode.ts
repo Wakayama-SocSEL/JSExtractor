@@ -24,7 +24,8 @@ export default class ProcessedNode {
       if (
         isNode(node) &&
         (!Array.isArray(node) || node.length != 0) &&
-        !(n.Literal.check(path.value) && (field == "value" || field == "regex"))
+        !(n.Literal.check(path.value) && (field == "value" || field == "regex")) &&
+        !(n.TemplateElement.check(path.value) && field == "value")
       ) {
         nodeFields.push(field);
       }
