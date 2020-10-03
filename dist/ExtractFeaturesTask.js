@@ -48,7 +48,7 @@ class ExtractFeaturesTask {
                     features.push(featureExtractor.extractFeatures(path));
                 }
                 catch (e) {
-                    logger.error(path, e);
+                    logger.error(this.path, e);
                 }
             });
             return features;

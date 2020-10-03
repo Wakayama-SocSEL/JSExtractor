@@ -58,7 +58,7 @@ export default class ExtractFeaturesTask {
           const featureExtractor = new FeatureExtractor(this.m_CommandLineValues);
           features.push(featureExtractor.extractFeatures(path));
         } catch (e) {
-          logger.error(path, e);
+          logger.error(this.path, e);
         }
       });
 
