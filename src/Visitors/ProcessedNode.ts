@@ -3,7 +3,7 @@ import { namedTypes as n, getFieldNames, getFieldValue } from "ast-types";
 import Property from "../FeaturesEntities/Property";
 
 const isNode = (value: n.Node): boolean => {
-  return !!(typeof value === "object" && value);
+  return !!(typeof value === "object" && value && "loc" in value);
 };
 
 export default class ProcessedNode {
@@ -21,12 +21,7 @@ export default class ProcessedNode {
     const nodeFields: string[] = [];
     for (const field of fields) {
       const node = getFieldValue(path.value, field);
-      if (
-        isNode(node) &&
-        (!Array.isArray(node) || node.length != 0) &&
-        !(n.Literal.check(path.value) && (field == "value" || field == "regex")) &&
-        !(n.TemplateElement.check(path.value) && field == "value")
-      ) {
+      if (isNode(node) || (Array.isArray(node) && node.length != 0)) {
         nodeFields.push(field);
       }
     }
@@ -35,7 +30,9 @@ export default class ProcessedNode {
       const child = path.get(key);
       if (Array.isArray(child.value)) {
         for (let index = 0; index < child.value.length; index++) {
-          this.children.push(new ProcessedNode(child.get(index), this));
+          if (isNode(child.get(index))) {
+            this.children.push(new ProcessedNode(child.get(index), this));
+          }
         }
       } else {
         this.children.push(new ProcessedNode(child, this));

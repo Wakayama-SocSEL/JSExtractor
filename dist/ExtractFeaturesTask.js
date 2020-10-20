@@ -36,7 +36,13 @@ class ExtractFeaturesTask {
         this.extractSingleFile = () => {
             const features = [];
             jscodeshift(fs_1.readFileSync(this.path, Common.UTF8).toString(), {
-                parser: require("recast/parsers/esprima"),
+                parser: {
+                    parse(source) {
+                        return require("recast/parsers/babel").parse(source, {
+                            sourceType: "script",
+                        });
+                    },
+                },
             })
                 .find(jscodeshift.Function)
                 .filter((path) => {

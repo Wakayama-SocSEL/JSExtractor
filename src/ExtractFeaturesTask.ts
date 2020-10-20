@@ -6,6 +6,7 @@ import FeatureExtractor from "./FeatureExtractor";
 import { readFileSync } from "fs";
 import * as jscodeshift from "jscodeshift";
 import * as log4js from "log4js";
+import { parse as babelParse } from "@babel/parser";
 
 log4js.configure({
   appenders: {
@@ -47,7 +48,13 @@ export default class ExtractFeaturesTask {
   extractSingleFile = (): ProgramFeatures[] => {
     const features = [];
     jscodeshift(readFileSync(this.path, Common.UTF8).toString(), {
-      parser: require("recast/parsers/esprima"),
+      parser: {
+        parse(source: string): typeof babelParse {
+          return require("recast/parsers/babel").parse(source, {
+            sourceType: "script",
+          });
+        },
+      },
     })
       .find(jscodeshift.Function)
       .filter((path) => {

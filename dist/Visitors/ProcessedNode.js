@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ast_types_1 = require("ast-types");
 const isNode = (value) => {
-    return !!(typeof value === "object" && value);
+    return !!(typeof value === "object" && value && "loc" in value);
 };
 class ProcessedNode {
     constructor(path, parent = null) {
@@ -34,10 +34,7 @@ class ProcessedNode {
         const nodeFields = [];
         for (const field of fields) {
             const node = ast_types_1.getFieldValue(path.value, field);
-            if (isNode(node) &&
-                (!Array.isArray(node) || node.length != 0) &&
-                !(ast_types_1.namedTypes.Literal.check(path.value) && (field == "value" || field == "regex")) &&
-                !(ast_types_1.namedTypes.TemplateElement.check(path.value) && field == "value")) {
+            if (isNode(node) || (Array.isArray(node) && node.length != 0)) {
                 nodeFields.push(field);
             }
         }
@@ -45,7 +42,9 @@ class ProcessedNode {
             const child = path.get(key);
             if (Array.isArray(child.value)) {
                 for (let index = 0; index < child.value.length; index++) {
-                    this.children.push(new ProcessedNode(child.get(index), this));
+                    if (isNode(child.get(index))) {
+                        this.children.push(new ProcessedNode(child.get(index), this));
+                    }
                 }
             }
             else {

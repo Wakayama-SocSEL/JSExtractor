@@ -4,6 +4,24 @@ import { ASTPath } from "jscodeshift";
 import { namedTypes as n } from "ast-types";
 import * as Common from "../Common/Common";
 
+import * as log4js from "log4js";
+
+log4js.configure({
+  appenders: {
+    system: {
+      type: "file",
+      filename: "error.log",
+    },
+  },
+  categories: {
+    default: {
+      appenders: ["system"],
+      level: "error",
+    },
+  },
+});
+const logger = log4js.getLogger("system");
+
 export default class Property {
   private RawType: string;
   private Type: string;
@@ -33,6 +51,10 @@ export default class Property {
       loc = node.parentPath.value.loc;
     } else {
       loc = node.value.loc;
+    }
+
+    if (loc === undefined) {
+      logger.error(node);
     }
 
     const nameToSplit = loc["tokens"]
