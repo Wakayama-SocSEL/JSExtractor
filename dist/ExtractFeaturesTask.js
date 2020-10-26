@@ -5,20 +5,6 @@ const FeatureExtractor_1 = require("./FeatureExtractor");
 const fs_1 = require("fs");
 const jscodeshift = require("jscodeshift");
 const log4js = require("log4js");
-log4js.configure({
-    appenders: {
-        system: {
-            type: "file",
-            filename: "error.log",
-        },
-    },
-    categories: {
-        default: {
-            appenders: ["system"],
-            level: "error",
-        },
-    },
-});
 const logger = log4js.getLogger("system");
 class ExtractFeaturesTask {
     constructor(commandLineValues, path) {

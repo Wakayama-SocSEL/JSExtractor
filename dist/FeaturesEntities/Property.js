@@ -3,20 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ast_types_1 = require("ast-types");
 const Common = require("../Common/Common");
 const log4js = require("log4js");
-log4js.configure({
-    appenders: {
-        system: {
-            type: "file",
-            filename: "error.log",
-        },
-    },
-    categories: {
-        default: {
-            appenders: ["system"],
-            level: "error",
-        },
-    },
-});
 const logger = log4js.getLogger("system");
 class Property {
     constructor(node) {

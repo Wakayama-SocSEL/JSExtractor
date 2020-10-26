@@ -8,20 +8,6 @@ import * as jscodeshift from "jscodeshift";
 import * as log4js from "log4js";
 import { parse as babelParse } from "@babel/parser";
 
-log4js.configure({
-  appenders: {
-    system: {
-      type: "file",
-      filename: "error.log",
-    },
-  },
-  categories: {
-    default: {
-      appenders: ["system"],
-      level: "error",
-    },
-  },
-});
 const logger = log4js.getLogger("system");
 export default class ExtractFeaturesTask {
   private m_CommandLineValues: CommandLineValues;

@@ -6,20 +6,6 @@ import * as Common from "../Common/Common";
 
 import * as log4js from "log4js";
 
-log4js.configure({
-  appenders: {
-    system: {
-      type: "file",
-      filename: "error.log",
-    },
-  },
-  categories: {
-    default: {
-      appenders: ["system"],
-      level: "error",
-    },
-  },
-});
 const logger = log4js.getLogger("system");
 
 export default class Property {
