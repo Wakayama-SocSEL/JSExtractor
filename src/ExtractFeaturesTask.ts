@@ -28,6 +28,8 @@ export default class ExtractFeaturesTask {
     const toPrint = this.featuresToString(features).trim();
     if (toPrint.length > 0) {
       console.log(toPrint);
+    } else {
+      logger.error(this.path, "empty features");
     }
   };
 

@@ -42,7 +42,9 @@ class ProcessedNode {
             const child = path.get(key);
             if (Array.isArray(child.value)) {
                 for (let index = 0; index < child.value.length; index++) {
-                    this.children.push(new ProcessedNode(child.get(index), this));
+                    if (isNode(child.get(index).value)) {
+                        this.children.push(new ProcessedNode(child.get(index), this));
+                    }
                 }
             }
             else {

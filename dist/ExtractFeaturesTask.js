@@ -18,6 +18,9 @@ class ExtractFeaturesTask {
             if (toPrint.length > 0) {
                 console.log(toPrint);
             }
+            else {
+                logger.error(this.path, "empty features");
+            }
         };
         this.extractSingleFile = () => {
             const features = [];
